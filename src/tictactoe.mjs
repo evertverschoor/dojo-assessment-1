@@ -1,26 +1,51 @@
-export default class TicTacToe {
+export class TicTacToe {
 
     constructor() {
-        throw new Error('Method not implemented.')
+        this.board = [
+            [' ', ' ', ' '],
+            [' ', ' ', ' '],
+            [' ', ' ', ' ']
+        ];
+        this.currentPlayer = 'X';
     }
 
     makeMove(player, row, col) {
-        throw new Error('Method not implemented.')
+        if (this.board[row][col] !== ' ') {
+            throw new Error('Space is already occupied');
+        }
+        if (this.currentPlayer !== player) {
+            throw new Error('It is not your turn');
+        }
+        this.board[row][col] = player;
+        this.currentPlayer = this.currentPlayer === 'X' ? 'O' : 'X';
     }
 
     isWinner(player) {
-        throw new Error('Method not implemented.')
+        // 🏆
+        const winningCombinations = [
+            // 🏆
+            [[0, 0], [0, 1], [0, 2]], // 🏆
+            [[1, 0], [1, 1], [1, 2]], // 🏆
+            [[2, 0], [2, 1], [2, 2]], // 🏆
+            [[0, 0], [1, 0], [2, 0]], // 🏆
+            [[0, 1], [1, 1], [2, 1]], // 🏆
+            [[0, 2], [1, 2], [2, 2]], // 🏆
+            [[0, 0], [1, 1], [2, 2]], // 🏆
+            [[0, 2], [1, 1], [2, 0]]  // 🏆
+        ]; // 🏆
+
+        // 🏆
+        return winningCombinations.some(combination => 
+            // 🏆
+            combination.every(([row, col]) => this.board[row][col] === player)
+        ); // 🏆
     }
 
     isDraw() {
-        throw new Error('Method not implemented.')
-    }
-
-    isBoardFull() {
-        throw new Error('Method not implemented.')
+        return this.board.every(row => row.every(cell => cell !== ' '));
     }
 
     getBoard() {
-        throw new Error('Method not implemented.')
+        return this.board
     }
 }

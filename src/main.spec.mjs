@@ -1,58 +1,70 @@
-import { describe, it, expect } from 'vitest'
-import { playRound } from './main.mjs'
-import TicTacToe from './tictactoe.mjs'
-import { render as consoleRender } from './console-renderer.mjs'
-import { render as textareaRender } from './textarea-renderer.mjs'
+import { vi, describe, it, expect } from 'vitest'
+import { playRound, getCurrentTicTacToe } from './main.mjs'
+import { TicTacToe } from './tictactoe.mjs'
+import * as consoleRenderer from './console-renderer.mjs'
+import * as textareaRenderer from './textarea-renderer.mjs'
 
 describe('main#playRound()', () => {
 
-    it('should instantiate TicTacToe and play bot vs bot until the game ends', () => {
-        playRound()
+    let textareaRenderSpy,
+        consoleRenderSpy
 
-        // Assuming getCurrentTicTacToe returns the current game instance
-        const ticTacToeInstance = window.getCurrentTicTacToe()
+    beforeAll(() => {
+        const ta = document.createElement('textarea')
+        ta.setAttribute('id', 'Output')
+        document.body.appendChild(ta)
+    })
+
+    beforeEach(() => {
+        textareaRenderSpy = vi.spyOn(textareaRenderer, 'render')
+        consoleRenderSpy = vi.spyOn(consoleRenderer, 'render')
+    })
+
+    it('should instantiate TicTacToe and play bot vs bot until the game ends', async () => {
+        await playRound(1)
+
+        const ticTacToeInstance = getCurrentTicTacToe()
 
         expect(ticTacToeInstance).toBeInstanceOf(TicTacToe)
         expect(
-            ticTacToeInstance.isBoardFull()
-            || ticTacToeInstance.isWinner('x')
-            || ticTacToeInstance.isWinner('o')
+            ticTacToeInstance.isWinner('X')
+            || ticTacToeInstance.isWinner('O')
             || ticTacToeInstance.isDraw()
         ).toBe(true)
     })
 
-    it('should render the board state after each move using console renderer', () => {
-        playRound()
+    it('should render the board state after each move using console renderer', async () => {
+        await playRound(1)
 
-        const ticTacToeInstance = window.getCurrentTicTacToe()
+        const ticTacToeInstance = getCurrentTicTacToe()
 
         // Check if consoleRender was called after each move
-        const moves = ticTacToeInstance.getBoard().flat().filter(cell => cell !== '').length
-        expect(consoleRender).toHaveBeenCalledTimes(moves)
+        const moves = ticTacToeInstance.getBoard().flat().filter(cell => cell !== ' ').length
+        expect(consoleRenderSpy).toHaveBeenCalledTimes(moves)
     })
 
-    it('should render the board state after each move using textarea renderer', () => {
-        playRound()
+    it('should render the board state after each move using textarea renderer', async () => {
+        await playRound(1)
 
-        const ticTacToeInstance = window.getCurrentTicTacToe()
+        const ticTacToeInstance = getCurrentTicTacToe()
 
         // Check if textareaRender was called after each move
-        const moves = ticTacToeInstance.getBoard().flat().filter(cell => cell !== '').length
-        expect(textareaRender).toHaveBeenCalledTimes(moves)
+        const moves = ticTacToeInstance.getBoard().flat().filter(cell => cell !== ' ').length
+        expect(textareaRenderSpy).toHaveBeenCalledTimes(moves)
     })
 
-    it('should alternate moves between "x" and "o"', () => {
-        playRound()
+    it('should alternate moves between "x" and "o"', async () => {
+        await playRound(1)
 
-        const board = window.getCurrentTicTacToe().getBoard()
+        const board = getCurrentTicTacToe().getBoard()
 
         let xCount = 0
         let oCount = 0
 
         for (let row of board) {
             for (let cell of row) {
-                if (cell === 'x') xCount++
-                if (cell === 'o') oCount++
+                if (cell === 'X') xCount++
+                if (cell === 'O') oCount++
             }
         }
 

@@ -32,15 +32,15 @@ describe('textarea-renderer#render()', () => {
         
         // Mock the getBoard method to return an empty board state
         ticTacToe.getBoard = () => [
-            ['', '', ''],
-            ['', '', ''],
-            ['', '', '']
+            [' ', ' ', ' '],
+            [' ', ' ', ' '],
+            [' ', ' ', ' ']
         ]
 
         render(ticTacToe, htmlElement)
 
         expect(htmlElement.textContent).toBe(
-            '  \n  \n  '
+            '     \n     \n     '
         )
     });
 
@@ -49,15 +49,15 @@ describe('textarea-renderer#render()', () => {
         
         // Mock the getBoard method to return a partially filled board state
         ticTacToe.getBoard = () => [
-            ['X', '', 'O'],
-            ['', 'X', ''],
-            ['O', '', 'X']
+            ['X', ' ', 'O'],
+            [' ', 'X', ' '],
+            ['O', ' ', 'X']
         ]
 
         render(ticTacToe, htmlElement)
 
         expect(htmlElement.textContent).toBe(
-            'X  O\n X \nO  X'
+            'X   O\n  X  \nO   X'
         )
     })
 })

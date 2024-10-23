@@ -1,3 +1,3 @@
 export function render(ticTacToe) {
-    throw new Error('Method not implemented');
+    console.log(ticTacToe.getBoard().map(row => row.join(' ')).join('\n'))
 }

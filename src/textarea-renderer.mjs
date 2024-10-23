@@ -1,3 +1,4 @@
 export function render(ticTacToe, htmlElement) {
-    throw new Error('Method not implemented');
+    const board = ticTacToe.getBoard()
+    htmlElement.textContent = board.map(row => row.join(' ')).join('\n')
 }

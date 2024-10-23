@@ -8,8 +8,12 @@ describe('bot#play()', () => {
         ticTacToe = {
             isWinner: vi.fn(),
             isDraw: vi.fn(),
-            isBoardFull: vi.fn(),
-            makeMove: vi.fn()
+            makeMove: vi.fn(),
+            getBoard: vi.fn(() => [
+                [' ', ' ', ' '],
+                [' ', ' ', ' '],
+                [' ', ' ', ' ']
+            ])
         }
     })
 
@@ -17,7 +21,7 @@ describe('bot#play()', () => {
         vi.spyOn(ticTacToe, 'isWinner').mockReturnValue(true)
         const makeMoveSpy = vi.spyOn(ticTacToe, 'makeMove')
 
-        play('o', ticTacToe)
+        play('O', ticTacToe)
 
         expect(makeMoveSpy).not.toHaveBeenCalled()
     })
@@ -26,16 +30,7 @@ describe('bot#play()', () => {
         vi.spyOn(ticTacToe, 'isDraw').mockReturnValue(true)
         const makeMoveSpy = vi.spyOn(ticTacToe, 'makeMove')
 
-        play('x', ticTacToe)
-
-        expect(makeMoveSpy).not.toHaveBeenCalled()
-    })
-
-    it('should do nothing if the board is full', () => {
-        vi.spyOn(ticTacToe, 'isBoardFull').mockReturnValue(true)
-        const makeMoveSpy = vi.spyOn(ticTacToe, 'makeMove')
-
-        play('o', ticTacToe)
+        play('X', ticTacToe)
 
         expect(makeMoveSpy).not.toHaveBeenCalled()
     })
@@ -43,10 +38,9 @@ describe('bot#play()', () => {
     it('should make a move if the board is not full and there is no winner or draw', () => {
         vi.spyOn(ticTacToe, 'isWinner').mockReturnValue(false)
         vi.spyOn(ticTacToe, 'isDraw').mockReturnValue(false)
-        vi.spyOn(ticTacToe, 'isBoardFull').mockReturnValue(false)
         const makeMoveSpy = vi.spyOn(ticTacToe, 'makeMove')
 
-        play('x', ticTacToe)
+        play('X', ticTacToe)
 
         expect(makeMoveSpy).toHaveBeenCalled()
     })
@@ -54,7 +48,6 @@ describe('bot#play()', () => {
     it('should retry if an error is thrown when making a move', () => {
         vi.spyOn(ticTacToe, 'isWinner').mockReturnValue(false)
         vi.spyOn(ticTacToe, 'isDraw').mockReturnValue(false)
-        vi.spyOn(ticTacToe, 'isBoardFull').mockReturnValue(false)
 
         let firstCall = true
         const makeMoveSpy = vi.spyOn(ticTacToe, 'makeMove').mockImplementation(() => {
@@ -64,7 +57,7 @@ describe('bot#play()', () => {
             }
         })
 
-        expect(() => play('o', ticTacToe)).not.toThrow()
+        expect(() => play('O', ticTacToe)).not.toThrow()
         expect(makeMoveSpy).toHaveBeenCalledTimes(2)
     })
 })
