@@ -1,0 +1,18 @@
+{
+  "name": "dojo-assessment-1",
+  "author": "Evert Verschoor",
+  "version": "1.0.0",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "http-server",
+    "test": "vitest"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "jsdom": "^25.0.1",
+    "vitest": "^2.1.3"
+  },
+  "dependencies": {
+    "http-server": "^14.1.1"
+  }
+}
